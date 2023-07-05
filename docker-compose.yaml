@@ -1,0 +1,58 @@
+version: "3"
+services:
+  phpswoole:
+    container_name: phpswoole
+    image: phpswoole/swoole:5.0-php8.1-alpine
+    restart: always
+    volumes:
+      - ./:/var/www/html
+    stdin_open: true
+    tty: true
+    environment:
+      - TZ=Asia/Shanghai
+    ports:
+      - "9500:9500"
+      - "9501:9501"
+      - "9502:9502"
+      - "9503:9503"
+    networks:
+      fh:
+
+  mysql8:
+    container_name: mysql8
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: fh123456
+    stdin_open: true
+    tty: true
+    ports:
+      - "3310:3310"
+    networks:
+      fh:
+
+  redis:
+    container_name: redis
+    image: redis
+    restart: always
+    stdin_open: true
+    tty: true
+    ports:
+      - "6379:6379"
+    networks:
+      fh:
+
+
+networks:
+  fh:
+    name: fh
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: "192.168.192.0/20"
+          gateway: "192.168.192.1"
+
+
+
